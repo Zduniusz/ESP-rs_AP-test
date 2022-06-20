@@ -36,6 +36,7 @@ fn main() {
         AccessPointConfiguration {
             ssid: SSID.into(),
             password: PASS.into(),
+            auth_method: if PASS != "" {AuthMethod::WPA2Personal} else { AuthMethod::None },
             ..Default::default()
         },
     )).unwrap();
@@ -48,7 +49,7 @@ fn main() {
     loop {
         unsafe {
             esp_wifi_ap_get_sta_list(wifi_sta_list);
-            if (*wifi_sta_list).num > 0 {led.set_high()} else {led.set_low()};
+            if (*wifi_sta_list).num > 0 {led.set_high()} else {led.set_low()}; // TODO FIX: Led will also turn on when station is connecting
             sleep(Duration::from_millis(500));
         }
     }
